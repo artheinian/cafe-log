@@ -53,230 +53,239 @@ export default function LoginScreen({ onLogin }) {
                 fontFamily: "'DM Sans', sans-serif",
             }}
         >
-            {/* Top Brown Navbar - Made taller to fully cover the text */}
-            <div
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: "138px",           // Increased height
-                    background: `linear-gradient(135deg, ${C.espresso} 0%, ${C.roast} 60%, #8b5030 100%)`,
-                    zIndex: 3,
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
-                }}
-            />
-
-            {/* Top Left: Logo + Track. Discover. Share. */}
-            <div
-                style={{
-                    position: "absolute",
-                    top: 28,
-                    left: 40,
-                    zIndex: 4,
-                }}
-            >
-                <div
-                    style={{
-                        fontSize: 11,
-                        letterSpacing: "0.22em",
-                        textTransform: "uppercase",
-                        color: "#d4a96a",
-                        fontWeight: 700,
-                        marginBottom: 6,
-                    }}
-                >
-                    Your Personal
-                </div>
-
-                <div
-                    style={{
-                        fontFamily: "'Playfair Display', serif",
-                        fontSize: 38,
-                        color: C.white,
-                        lineHeight: 1.05,
-                        fontWeight: 700,
-                    }}
-                >
-                    Café Drink
-                    <span style={{ color: C.caramelLight, fontStyle: "italic" }}>
-                        {" "}
-                        Diary
-                    </span>
-                </div>
-
-                {/* Track. Discover. Share. */}
-                <div
-                    style={{
-                        marginTop: 12,
-                        fontSize: 15,
-                        color: "rgba(255,255,255,0.88)",
-                        letterSpacing: "0.04em",
-                        fontWeight: 500,
-                    }}
-                >
-                    Track. Discover. Share.
-                </div>
-            </div>
-
-            {/* Main Login Form */}
+            {/* Main Split Layout - No top navbar */}
             <div
                 style={{
                     minHeight: "100vh",
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "140px 24px 60px",   // Increased top padding
-                    boxSizing: "border-box",
-                    position: "relative",
-                    zIndex: 2,
                 }}
             >
+                {/* LEFT SIDE - Branding */}
                 <div
                     style={{
-                        width: "100%",
-                        maxWidth: 430,
-                        background: "rgba(248,243,237,0.98)",
-                        border: "1px solid rgba(216,199,184,0.9)",
-                        borderRadius: 24,
-                        boxShadow: "0 20px 70px rgba(0,0,0,0.28)",
-                        overflow: "hidden",
-                        backdropFilter: "blur(8px)",
-                        marginTop: 48
+                        flex: 1,
+                        background: `linear-gradient(135deg, ${C.espresso} 0%, ${C.roast} 60%, #8b5030 100%)`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "60px 50px",
+                        position: "relative",
+                    }}
+                >
+                    <div style={{ maxWidth: "460px", textAlign: "left" }}>
+                        <div
+                            style={{
+                                fontSize: 11,
+                                letterSpacing: "0.22em",
+                                textTransform: "uppercase",
+                                color: "#d4a96a",
+                                fontWeight: 700,
+                                marginBottom: 8,
+                            }}
+                        >
+                            Your Personal
+                        </div>
+
+                        <div
+                            style={{
+                                fontFamily: "'Playfair Display', serif",
+                                fontSize: 54,
+                                color: C.white,
+                                lineHeight: 1.05,
+                                fontWeight: 700,
+                                marginBottom: 18,
+                            }}
+                        >
+                            Café Drink
+                            <span style={{ color: C.caramelLight, fontStyle: "italic" }}>
+                                {" "}
+                                Diary
+                            </span>
+                        </div>
+
+                        <div
+                            style={{
+                                fontSize: 19,
+                                color: "rgba(255,255,255,0.88)",
+                                letterSpacing: "0.03em",
+                                fontWeight: 500,
+                                lineHeight: 1.45,
+                            }}
+                        >
+                            Track. Discover. Share.
+                        </div>
+
+                        <div
+                            style={{
+                                marginTop: 80,
+                                fontSize: 15.5,
+                                color: "rgba(255,255,255,0.68)",
+                                maxWidth: 360,
+                                lineHeight: 1.6,
+                            }}
+                        >
+                            Keep all your favorite café drinks, tasting notes, and memories in one beautiful place.
+                        </div>
+                    </div>
+                </div>
+
+                {/* RIGHT SIDE - Login Form */}
+                <div
+                    style={{
+                        flex: 1,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        padding: "40px 70px",
+                        background: C.cream,
                     }}
                 >
                     <div
                         style={{
-                            padding: "32px 32px 20px",
-                            borderBottom: "1px solid #eadfd3",
-                            background:
-                                "linear-gradient(180deg, rgba(255,255,255,0.65) 0%, rgba(248,243,237,0.95) 100%)",
+                            width: "100%",
+                            maxWidth: 440,
+                            background: "rgba(248,243,237,0.98)",
+                            border: "1px solid rgba(216,199,184,0.9)",
+                            borderRadius: 24,
+                            boxShadow: "0 25px 80px rgba(0,0,0,0.22)",
+                            overflow: "hidden",
+                            backdropFilter: "blur(10px)",
                         }}
                     >
                         <div
                             style={{
-                                fontSize: 26,
-                                fontWeight: 800,
-                                color: "#2b2521",
-                                marginBottom: 8,
+                                padding: "38px 40px 26px",
+                                borderBottom: "1px solid #eadfd3",
+                                background:
+                                    "linear-gradient(180deg, rgba(255,255,255,0.68) 0%, rgba(248,243,237,0.96) 100%)",
                             }}
                         >
-                            {tab === "login" ? "Welcome back" : "Create your account"}
+                            <div
+                                style={{
+                                    fontSize: 28,
+                                    fontWeight: 800,
+                                    color: "#2b2521",
+                                    marginBottom: 10,
+                                }}
+                            >
+                                {tab === "login" ? "Welcome back" : "Create your account"}
+                            </div>
+
+                            <div
+                                style={{
+                                    fontSize: 15,
+                                    color: "#74685e",
+                                    lineHeight: 1.6,
+                                }}
+                            >
+                                {tab === "login"
+                                    ? "Sign in to keep track of your favorite café drinks and notes."
+                                    : "Start your own café diary and save your favorite drinks in one place."}
+                            </div>
                         </div>
 
-                        <div
-                            style={{
-                                fontSize: 14.5,
-                                color: "#74685e",
-                                lineHeight: 1.5,
-                            }}
-                        >
-                            {tab === "login"
-                                ? "Sign in to keep track of your favorite café drinks and notes."
-                                : "Start your own café diary and save your favorite drinks in one place."}
-                        </div>
-                    </div>
+                        <div style={{ padding: "38px 40px 34px" }}>
+                            {/* Tab Switcher */}
+                            <div
+                                style={{
+                                    display: "flex",
+                                    gap: 10,
+                                    marginBottom: 30,
+                                    background: "#efe7df",
+                                    borderRadius: 12,
+                                    padding: 6,
+                                }}
+                            >
+                                {["login", "signup"].map((t) => (
+                                    <button
+                                        key={t}
+                                        onClick={() => setTab(t)}
+                                        style={{
+                                            flex: 1,
+                                            padding: "13px 18px",
+                                            border: "none",
+                                            borderRadius: 10,
+                                            cursor: "pointer",
+                                            fontFamily: "'DM Sans', sans-serif",
+                                            fontWeight: 700,
+                                            fontSize: 15,
+                                            background: tab === t ? C.caramel : "transparent",
+                                            color: tab === t ? C.white : "#5e5a56",
+                                            transition: "0.22s ease",
+                                        }}
+                                    >
+                                        {t === "login" ? "Sign In" : "Sign Up"}
+                                    </button>
+                                ))}
+                            </div>
 
-                    <div style={{ padding: "32px 32px 28px" }}>
-                        <div
-                            style={{
-                                display: "flex",
-                                gap: 10,
-                                marginBottom: 26,
-                                background: "#efe7df",
-                                borderRadius: 12,
-                                padding: 6,
-                            }}
-                        >
-                            {["login", "signup"].map((t) => (
-                                <button
-                                    key={t}
-                                    onClick={() => setTab(t)}
-                                    style={{
-                                        flex: 1,
-                                        padding: "12px 16px",
-                                        border: "none",
-                                        borderRadius: 10,
-                                        cursor: "pointer",
-                                        fontFamily: "'DM Sans', sans-serif",
-                                        fontWeight: 700,
-                                        fontSize: 14.5,
-                                        background: tab === t ? C.caramel : "transparent",
-                                        color: tab === t ? C.white : "#5e5a56",
-                                        transition: "0.2s ease",
-                                    }}
-                                >
-                                    {t === "login" ? "Sign In" : "Sign Up"}
-                                </button>
-                            ))}
-                        </div>
+                            {tab === "signup" && (
+                                <div style={{ marginBottom: 20 }}>
+                                    <label style={lbl}>Display Name</label>
+                                    <input
+                                        style={inp}
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        placeholder="e.g. Lena"
+                                    />
+                                </div>
+                            )}
 
-                        {tab === "signup" && (
-                            <div style={{ marginBottom: 18 }}>
-                                <label style={lbl}>Display Name</label>
+                            <div style={{ marginBottom: 20 }}>
+                                <label style={lbl}>Email</label>
                                 <input
                                     style={inp}
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    placeholder="e.g. Lena"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Enter your email"
                                 />
                             </div>
-                        )}
 
-                        <div style={{ marginBottom: 18 }}>
-                            <label style={lbl}>Email</label>
-                            <input
-                                style={inp}
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Enter your email"
-                            />
-                        </div>
-
-                        <div style={{ marginBottom: 24 }}>
-                            <label style={lbl}>Password</label>
-                            <input
-                                style={inp}
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                placeholder="Enter your password"
-                            />
-                        </div>
-
-                        <button
-                            onClick={onLogin}
-                            style={{
-                                width: "100%",
-                                padding: "15px",
-                                background: `linear-gradient(135deg, ${C.caramel}, #8b4010)`,
-                                color: C.white,
-                                border: "none",
-                                borderRadius: 12,
-                                fontFamily: "'DM Sans', sans-serif",
-                                fontWeight: 800,
-                                fontSize: 15.5,
-                                cursor: "pointer",
-                                boxShadow: "0 10px 24px rgba(139,64,16,0.25)",
-                            }}
-                        >
-                            {tab === "login" ? "Sign In →" : "Create Account"}
-                        </button>
-
-                        {tab === "login" && (
-                            <div style={{ textAlign: "center", marginTop: 16 }}>
-                                <span
-                                    style={{
-                                        fontSize: 13,
-                                        color: C.info,
-                                        cursor: "pointer",
-                                        fontWeight: 500,
-                                    }}
-                                >
-                                    Forgot password?
-                                </span>
+                            <div style={{ marginBottom: 28 }}>
+                                <label style={lbl}>Password</label>
+                                <input
+                                    style={inp}
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Enter your password"
+                                />
                             </div>
-                        )}
+
+                            <button
+                                onClick={onLogin}
+                                style={{
+                                    width: "100%",
+                                    padding: "16px",
+                                    background: `linear-gradient(135deg, ${C.caramel}, #8b4010)`,
+                                    color: C.white,
+                                    border: "none",
+                                    borderRadius: 12,
+                                    fontFamily: "'DM Sans', sans-serif",
+                                    fontWeight: 800,
+                                    fontSize: 16,
+                                    cursor: "pointer",
+                                    boxShadow: "0 12px 30px rgba(139,64,16,0.26)",
+                                }}
+                            >
+                                {tab === "login" ? "Sign In →" : "Create Account"}
+                            </button>
+
+                            {tab === "login" && (
+                                <div style={{ textAlign: "center", marginTop: 20 }}>
+                                    <span
+                                        style={{
+                                            fontSize: 13.5,
+                                            color: C.info,
+                                            cursor: "pointer",
+                                            fontWeight: 500,
+                                        }}
+                                    >
+                                        Forgot password?
+                                    </span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
