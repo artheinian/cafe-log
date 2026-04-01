@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const C = {
     muted: "#6b7280",
@@ -22,14 +23,18 @@ const inp = {
     boxSizing: "border-box",
     fontSize: 15,
     outline: "none",
-    background: "#fff",
+    background: "#ffffff",
+    color: "#2b2521",
 };
 
 export default function LoginScreen({ onLogin }) {
     const [tab, setTab] = useState("login");
-    const [email, setEmail] = useState("lena@email.com");
-    const [password, setPassword] = useState("••••••••");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     const [name, setName] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    const navigate = useNavigate();
 
     const lbl = {
         fontSize: 11,
@@ -40,6 +45,67 @@ export default function LoginScreen({ onLogin }) {
         fontFamily: "'DM Sans', sans-serif",
         display: "block",
         marginBottom: 2,
+    };
+
+    const handleSubmit = async () => {
+        if (!username.trim() || !password.trim()) {
+            alert("Please enter both username and password");
+            return;
+        }
+
+        if (tab === "signup" && !name.trim()) {
+            alert("Please enter a display name");
+            return;
+        }
+
+        setIsSubmitting(true);
+
+        try {
+            const endpoint = tab === "login" ? "/login" : "/signup";
+
+            const response = await fetch(`http://localhost:5000/api/auth${endpoint}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(
+                    tab === "signup"
+                        ? {
+                            username: username.trim(),
+                            displayName: name.trim(),
+                            password,
+                        }
+                        : {
+                            username: username.trim(),
+                            password,
+                        }
+                ),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                alert(data.message || "Operation failed");
+                return;
+            }
+
+            if (data.token) {
+                localStorage.setItem("token", data.token);
+            }
+
+
+            if (onLogin) {
+                onLogin(data.user);
+            }
+            navigate("/home")
+        } catch (error) {
+            console.error("Error:", error);
+            alert(
+                "❌ Cannot connect to the backend.\n\nPlease check:\n1. Backend server is running\n2. It is using http://localhost:5000\n3. CORS is enabled on the backend"
+            );
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     return (
@@ -53,14 +119,7 @@ export default function LoginScreen({ onLogin }) {
                 fontFamily: "'DM Sans', sans-serif",
             }}
         >
-            {/* Main Split Layout - No top navbar */}
-            <div
-                style={{
-                    minHeight: "100vh",
-                    display: "flex",
-                }}
-            >
-                {/* LEFT SIDE - Branding */}
+            <div style={{ minHeight: "100vh", display: "flex" }}>
                 <div
                     style={{
                         flex: 1,
@@ -69,7 +128,6 @@ export default function LoginScreen({ onLogin }) {
                         alignItems: "center",
                         justifyContent: "center",
                         padding: "60px 50px",
-                        position: "relative",
                     }}
                 >
                     <div style={{ maxWidth: "460px", textAlign: "left" }}>
@@ -124,12 +182,12 @@ export default function LoginScreen({ onLogin }) {
                                 lineHeight: 1.6,
                             }}
                         >
-                            Keep all your favorite café drinks, tasting notes, and memories in one beautiful place.
+                            Keep all your favorite café drinks, tasting notes, and memories in
+                            one beautiful place.
                         </div>
                     </div>
                 </div>
 
-                {/* RIGHT SIDE - Login Form */}
                 <div
                     style={{
                         flex: 1,
@@ -185,7 +243,6 @@ export default function LoginScreen({ onLogin }) {
                         </div>
 
                         <div style={{ padding: "38px 40px 34px" }}>
-                            {/* Tab Switcher */}
                             <div
                                 style={{
                                     display: "flex",
@@ -200,18 +257,19 @@ export default function LoginScreen({ onLogin }) {
                                     <button
                                         key={t}
                                         onClick={() => setTab(t)}
+                                        disabled={isSubmitting}
                                         style={{
                                             flex: 1,
                                             padding: "13px 18px",
                                             border: "none",
                                             borderRadius: 10,
-                                            cursor: "pointer",
+                                            cursor: isSubmitting ? "default" : "pointer",
                                             fontFamily: "'DM Sans', sans-serif",
                                             fontWeight: 700,
                                             fontSize: 15,
                                             background: tab === t ? C.caramel : "transparent",
                                             color: tab === t ? C.white : "#5e5a56",
-                                            transition: "0.22s ease",
+                                            opacity: isSubmitting ? 0.7 : 1,
                                         }}
                                     >
                                         {t === "login" ? "Sign In" : "Sign Up"}
@@ -227,17 +285,19 @@ export default function LoginScreen({ onLogin }) {
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
                                         placeholder="e.g. Lena"
+                                        disabled={isSubmitting}
                                     />
                                 </div>
                             )}
 
                             <div style={{ marginBottom: 20 }}>
-                                <label style={lbl}>Email</label>
+                                <label style={lbl}>Username</label>
                                 <input
                                     style={inp}
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    placeholder="Enter your email"
+                                    value={username}
+                                    onChange={(e) => setUsername(e.target.value)}
+                                    placeholder="Enter username"
+                                    disabled={isSubmitting}
                                 />
                             </div>
 
@@ -249,11 +309,13 @@ export default function LoginScreen({ onLogin }) {
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter your password"
+                                    disabled={isSubmitting}
                                 />
                             </div>
 
                             <button
-                                onClick={onLogin}
+                                onClick={handleSubmit}
+                                disabled={isSubmitting}
                                 style={{
                                     width: "100%",
                                     padding: "16px",
@@ -264,27 +326,18 @@ export default function LoginScreen({ onLogin }) {
                                     fontFamily: "'DM Sans', sans-serif",
                                     fontWeight: 800,
                                     fontSize: 16,
-                                    cursor: "pointer",
-                                    boxShadow: "0 12px 30px rgba(139,64,16,0.26)",
+                                    cursor: isSubmitting ? "default" : "pointer",
+                                    opacity: isSubmitting ? 0.8 : 1,
                                 }}
                             >
-                                {tab === "login" ? "Sign In →" : "Create Account"}
+                                {isSubmitting
+                                    ? tab === "login"
+                                        ? "Signing In..."
+                                        : "Creating Account..."
+                                    : tab === "login"
+                                        ? "Sign In →"
+                                        : "Create Account"}
                             </button>
-
-                            {tab === "login" && (
-                                <div style={{ textAlign: "center", marginTop: 20 }}>
-                                    <span
-                                        style={{
-                                            fontSize: 13.5,
-                                            color: C.info,
-                                            cursor: "pointer",
-                                            fontWeight: 500,
-                                        }}
-                                    >
-                                        Forgot password?
-                                    </span>
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>

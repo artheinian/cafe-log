@@ -1,16 +1,14 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./screens/HomeScreen";
 
 export default function App() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        width: "100vw",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
-      < LoginScreen onLogin={() => alert("works")} />
-    </ div >
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginScreen />} />
+        <Route path="/home" element={<HomeScreen />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
