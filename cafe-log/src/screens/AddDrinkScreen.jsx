@@ -38,15 +38,19 @@ export default function AddDrinkScreen({
         return { ...emptyForm };
     });
 
-    const handleSubmit = () => {
-        const newDrink = {
-            id: Date.now(),
-            ...form,
-            date: new Date().toISOString(),
-        };
+    const handleSubmit = async () => {
+        try {
+            await onAddDrink?.({
+                ...form,
+                rating: Number(form.rating) || 0,
+                isPublic: !!form.isPublic,
+            });
 
-        onAddDrink?.(newDrink);
-        onBack();
+            onBack();
+        } catch (error) {
+            console.error(error);
+            alert(error.message || "Failed to save drink");
+        }
     };
 
     return (

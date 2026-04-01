@@ -142,9 +142,9 @@ export default function HomeScreen({
                         No drinks yet. Tap + to add your first one.
                     </div>
                 ) : (
-                    visible.map((d) => (
+                    visible.map((d, index) => (
                         <DrinkCard
-                            key={d.id}
+                            key={d.id ?? `${d.name}-${d.cafe}-${index}`}
                             drink={d}
                             onViewCafe={onViewCafe}
                             onEdit={onEditDrink}

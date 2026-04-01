@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import AddDrinkScreen from "./screens/AddDrinkScreen";
@@ -15,7 +15,7 @@ function HomePage({ drinks, user, onDeleteDrink }) {
       user={user}
       onAddDrink={() => navigate("/add-drink")}
       onEditDrink={() => navigate("/add-drink")}
-      onViewCafe={() => {}}
+      onViewCafe={() => { }}
       onDeleteDrink={onDeleteDrink}
       onGoProfile={() => navigate("/profile")}
     />
@@ -42,16 +42,79 @@ export default function App() {
     return savedUser ? JSON.parse(savedUser) : null;
   });
 
+  useEffect(() => {
+    const loadDrinks = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setDrinks([]);
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:5000/api/drinks", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Failed to fetch drinks");
+        }
+
+        setDrinks(data.drinks || []);
+      } catch (error) {
+        console.error(error);
+        setDrinks([]);
+      }
+    };
+
+    loadDrinks();
+  }, [user]);
+
   const handleLogin = (loggedInUser) => {
     setUser(loggedInUser);
     localStorage.setItem("user", JSON.stringify(loggedInUser));
   };
 
-  const handleAddDrink = (newDrink) => {
-    setDrinks((prev) => [newDrink, ...prev]);
+  const handleAddDrink = async (newDrink) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch("http://localhost:5000/api/drinks", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(newDrink),
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to save drink");
+    }
+
+    setDrinks((prev) => [data.drink, ...prev]);
   };
 
-  const handleDeleteDrink = (id) => {
+  const handleDeleteDrink = async (id) => {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(`http://localhost:5000/api/drinks/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to delete drink");
+    }
+
     setDrinks((prev) => prev.filter((drink) => drink.id !== id));
   };
 
