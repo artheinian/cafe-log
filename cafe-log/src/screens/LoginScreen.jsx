@@ -27,6 +27,10 @@ const inp = {
     color: "#2b2521",
 };
 
+// Add regex constants here (outside component)
+const USERNAME_REGEX = /^[a-zA-Z0-9_]{3,20}$/;
+const DISPLAY_NAME_REGEX = /^[a-zA-Z0-9][a-zA-Z0-9 '\-]{1,39}$/;
+
 export default function LoginScreen({ onLogin }) {
     const [tab, setTab] = useState("login");
     const [username, setUsername] = useState("");
@@ -48,6 +52,7 @@ export default function LoginScreen({ onLogin }) {
     };
 
     const handleSubmit = async () => {
+        // Basic empty field checks
         if (!username.trim() || !password.trim()) {
             alert("Please enter both username and password");
             return;
@@ -55,6 +60,25 @@ export default function LoginScreen({ onLogin }) {
 
         if (tab === "signup" && !name.trim()) {
             alert("Please enter a display name");
+            return;
+        }
+
+        // Add validation checks here (after basic checks, before setIsSubmitting)
+        // Validate username format
+        if (!USERNAME_REGEX.test(username.trim())) {
+            alert("Username must be 3-20 characters and use only letters, numbers, or underscores.");
+            return;
+        }
+
+        // Validate display name format for signup
+        if (tab === "signup" && !DISPLAY_NAME_REGEX.test(name.trim())) {
+            alert("Display name must be 2-40 characters and may only use letters, numbers, spaces, apostrophes, and hyphens.");
+            return;
+        }
+
+        // Validate password length
+        if (password.trim().length < 8 || password.trim().length > 72) {
+            alert("Password must be between 8 and 72 characters.");
             return;
         }
 
@@ -93,7 +117,6 @@ export default function LoginScreen({ onLogin }) {
                 localStorage.setItem("token", data.token);
             }
 
-
             if (onLogin) {
                 onLogin(data.user);
             }
@@ -107,6 +130,7 @@ export default function LoginScreen({ onLogin }) {
             setIsSubmitting(false);
         }
     };
+
 
     return (
         <div
