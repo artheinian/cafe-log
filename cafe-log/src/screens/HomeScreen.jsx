@@ -11,7 +11,7 @@ export default function HomeScreen({
     user = null,
     onViewCafe,
     onAddDrink,
-    onEditDrink,
+    onEditDrink,      // This should be a function that navigates to edit screen
     onDeleteDrink,
     onGoProfile,
 }) {
@@ -27,12 +27,20 @@ export default function HomeScreen({
     const displayName = user?.displayName || "Friend";
     const initial = displayName.charAt(0).toUpperCase();
 
+    const handleEdit = (drink) => {
+        if (drink && onEditDrink) {
+            console.log("🖊️ Editing drink:", drink);   // ← Debug
+            onEditDrink(drink);   // Pass the actual drink object
+        }
+    };
+
     const handleDelete = (id) => {
         onDeleteDrink?.(id);
     };
 
     return (
         <div style={{ flex: 1, display: "flex", flexDirection: "column", overflowY: "auto" }}>
+            {/* Header remains the same */}
             <div
                 style={{
                     background: `linear-gradient(135deg,${C.espresso},${C.roast})`,
@@ -147,7 +155,7 @@ export default function HomeScreen({
                             key={d.id ?? `${d.name}-${d.cafe}-${index}`}
                             drink={d}
                             onViewCafe={onViewCafe}
-                            onEdit={onEditDrink}
+                            onEdit={handleEdit}           // ← Changed here
                             onDelete={handleDelete}
                         />
                     ))

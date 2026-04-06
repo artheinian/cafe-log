@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ScreenHeader from "../components/ScreenHeader";
 import AddDrinkForm from "../components/AddDrinkForm";
 
@@ -18,9 +18,15 @@ export default function AddDrinkScreen({
     onBack,
     onAddDrink,
 }) {
-    const [form, setForm] = useState(() => {
-        if (editDrink) {
-            return {
+    const [form, setForm] = useState(emptyForm);
+
+    // Debug: See what editDrink actually contains
+    useEffect(() => {
+        console.log("📌 AddDrinkScreen received editDrink:", editDrink);
+        console.log("Type of editDrink:", typeof editDrink);
+
+        if (editDrink && Object.keys(editDrink).length > 0) {
+            const newForm = {
                 name: editDrink.name ?? "",
                 cafe: editDrink.cafe ?? "",
                 cafeAddress: editDrink.cafeAddress ?? "",
@@ -29,14 +35,14 @@ export default function AddDrinkScreen({
                 notes: editDrink.notes ?? "",
                 isPublic: editDrink.isPublic ?? false,
             };
+            console.log("Setting form to:", newForm);
+            setForm(newForm);
+        } else if (prefillCafe) {
+            setForm({ ...emptyForm, cafe: prefillCafe });
+        } else {
+            setForm({ ...emptyForm });
         }
-
-        if (prefillCafe) {
-            return { ...emptyForm, cafe: prefillCafe };
-        }
-
-        return { ...emptyForm };
-    });
+    }, [editDrink, prefillCafe]);
 
     const handleSubmit = async () => {
         try {
@@ -45,7 +51,6 @@ export default function AddDrinkScreen({
                 rating: Number(form.rating) || 0,
                 isPublic: !!form.isPublic,
             });
-
             onBack();
         } catch (error) {
             console.error(error);
