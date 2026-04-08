@@ -162,24 +162,34 @@ export default function HomeScreen({
                 )}
             </div>
 
+            {/* Fixed Floating Add Button - Bottom Right */}
             <button
                 onClick={onAddDrink}
                 style={{
-                    position: "absolute",
-                    bottom: 80,
-                    right: 16,
-                    width: 52,
-                    height: 52,
-                    borderRadius: 26,
-                    background: `linear-gradient(135deg,${C.caramel},#8b4010)`,
+                    position: "fixed",           // Stays in place when scrolling
+                    bottom: "30px",
+                    right: "30px",               // ← Right side
+                    width: "62px",
+                    height: "62px",
+                    background: `linear-gradient(135deg, ${C.caramel}, #8b4010)`,
                     border: "none",
                     cursor: "pointer",
-                    fontSize: 26,
+                    fontSize: "34px",
                     color: C.white,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    boxShadow: "0 4px 16px rgba(120,60,10,0.35)",
+                    boxShadow: "0 8px 25px rgba(139, 64, 16, 0.45)",
+                    zIndex: 100,
+                    transition: "all 0.2s ease",
+                }}
+                onMouseOver={(e) => {
+                    e.target.style.transform = "scale(1.1)";
+                    e.target.style.boxShadow = "0 12px 30px rgba(139, 64, 16, 0.5)";
+                }}
+                onMouseOut={(e) => {
+                    e.target.style.transform = "scale(1)";
+                    e.target.style.boxShadow = "0 8px 25px rgba(139, 64, 16, 0.45)";
                 }}
             >
                 +
