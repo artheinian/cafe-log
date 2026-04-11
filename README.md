@@ -32,3 +32,10 @@ The frontend is built with React and Vite, while the backend uses Express and SQ
 ```bash
 npm install
 npm run dev
+
+### Backend
+```bash
+cd cafe-log-backend
+npm install
+npx run server
+
